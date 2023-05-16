@@ -1,0 +1,27 @@
+import os
+import cv2
+import numpy as np
+from sklearn.model_selection import train_test_split
+
+# 画像データとラベルを保存するリスト
+data = []
+labels = []
+
+# 画像データのパス
+image_dirs = ['path_to_food_images', 'path_to_human_images', 'path_to_scenery_images']
+
+# 各画像データを読み込み、リサイズと正規化を行う
+for i, image_dir in enumerate(image_dirs):
+    for filename in os.listdir(image_dir):
+        img = cv2.imread(os.path.join(image_dir, filename))
+        img = cv2.resize(img, (224, 224))  # リサイズ
+        img = img / 255.0  # 正規化
+        data.append(img)
+        labels.append(i)  # ラベルを追加
+
+# リストをnumpy配列に変換
+data = np.array(data)
+labels = np.array(labels)
+
+# 訓練データとテストデータに分割
+train_data, test_data, train_labels, test_labels = train_test_split(data, labels, test_size=0.2)
